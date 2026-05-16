@@ -8,14 +8,14 @@ namespace ChaTweaks;
 public partial class Plugin : BaseUnityPlugin
 {
     internal static ManualLogSource Log { get; private set; } = null!;
-    private Harmony harmony;
+    private Harmony harmony = null!;
 
     private void Awake()
     {
         Log = Logger;
         Log.LogInfo($"Plugin {Name} is loaded!");
 
-        harmony = new Harmony("me.lukiiy.ChaTweaks");
+        harmony = new Harmony(Info.Metadata.GUID);
         harmony.PatchAll();
     }
 }
