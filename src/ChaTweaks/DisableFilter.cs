@@ -3,7 +3,7 @@ using HarmonyLib;
 namespace ChaTweaks;
 
 [HarmonyPatch(typeof(GameManager), nameof(GameManager.FilterProfanity))]
-public static class FilterProfanityPatch
+internal static class DisableProfanityFilter
 {
     static bool Prefix(string verifyString, ref string filteredString, ref bool __result)
     {
