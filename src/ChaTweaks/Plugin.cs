@@ -1,4 +1,4 @@
-﻿using BepInEx;
+using BepInEx;
 using BepInEx.Logging;
 using HarmonyLib;
 
@@ -12,10 +12,10 @@ public partial class Plugin : BaseUnityPlugin
 
     private void Awake()
     {
-        Log = Logger;
-        Log.LogInfo($"Plugin {Name} is loaded!");
-
         harmony = new Harmony(Info.Metadata.GUID);
+        Log = Logger;
+
+        Log.LogInfo($"Mod {Name} loaded!");
         harmony.PatchAll();
     }
 }
