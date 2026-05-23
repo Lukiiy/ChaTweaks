@@ -7,10 +7,10 @@ using UnityEngine.InputSystem;
 namespace ChaTweaks;
 
 [HarmonyPatch]
-public static class History
+public class History
 {
-    private const bool persistencyToggle = true;
-    private const bool recallToggle = true;
+    public static bool persistencyToggle = true;
+    public static bool recallToggle = true;
 
     private static readonly List<string> sent = [];
     private static readonly List<string> saved = [];
