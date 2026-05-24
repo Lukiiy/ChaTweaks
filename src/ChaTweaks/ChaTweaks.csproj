@@ -41,6 +41,9 @@
         <Reference Include="UI">
             <HintPath>lib/UnityEngine.UI.dll</HintPath>
         </Reference>
+        <Reference Include="Localization">
+            <HintPath>lib/Unity.Localization.dll</HintPath>
+        </Reference>
         <Reference Include="InputSystem">
             <HintPath>lib/Unity.InputSystem.dll</HintPath>
         </Reference>
