@@ -11,12 +11,16 @@ public class History
 {
     public static bool persistencyToggle = true;
     public static bool recallToggle = true;
+    public static bool spamCollapseToggle = true;
 
     private static readonly List<string> sent = [];
     private static readonly List<string> saved = [];
     private static int recallIdx = -1;
+    private static string? lastMsg;
+    private static int currentMsgRepeat;
 
     private static readonly FieldInfo queue = AccessTools.Field(typeof(TextChatUi), "historyQueue"); // lol reflection minecraft mod moment
+    private static readonly FieldInfo? newMsgQueue = AccessTools.Field(typeof(TextChatUi), "newMessagesQueue");
 
     // Save messages
     [HarmonyPatch(typeof(TextChatUi), "OnDestroy")]
@@ -75,5 +79,54 @@ public class History
 
         __instance.messageField.text = recallIdx == -1 ? string.Empty : sent[sent.Count - 1 - recallIdx];
         __instance.messageField.MoveToEndOfLine(false, false);
+    }
+
+    // Collapses repeated messages into a single message with a repeat count
+    [HarmonyPatch(typeof(TextChatUi), "ShowMessage")]
+    [HarmonyPrefix]
+    private static bool ShowMessage(string message)
+    {
+        if (!spamCollapseToggle || string.IsNullOrEmpty(message) || !SingletonBehaviour<TextChatUi>.HasInstance)
+        {
+            lastMsg = null;
+            currentMsgRepeat = 0;
+
+            return true;
+        }
+
+        if (message != lastMsg)
+        {
+            lastMsg = message;
+            currentMsgRepeat = 1;
+
+            return true;
+        }
+
+        UpdateLastMessage($"{message} <color=#9a9a9a>(x{++currentMsgRepeat})</color>");
+
+        return false;
+    }
+
+    // Updates the last message in the queue to the given text
+    private static void UpdateLastMessage(string text)
+    {
+        TextChatUi ui = SingletonBehaviour<TextChatUi>.Instance;
+
+        SetQueueTail(ui, newMsgQueue, text);
+        SetQueueTail(ui, queue, text);
+    }
+
+    // Sets the tail of the queue to the given text
+    private static void SetQueueTail(TextChatUi ui, FieldInfo? field, string text)
+    {
+        if (field?.GetValue(ui) is not Queue<TextChatMessageUi> queue || queue.Count == 0) return;
+
+        TextChatMessageUi? last = null;
+        foreach (TextChatMessageUi item in queue) last = item;
+
+        if (last?.messageText == null) return;
+
+        last.messageText.text = text;
+        last.messageText.ForceMeshUpdate();
     }
 }
