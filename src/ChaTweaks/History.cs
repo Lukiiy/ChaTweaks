@@ -21,28 +21,29 @@ public class History
     // Save messages
     [HarmonyPatch(typeof(TextChatUi), "OnDestroy")]
     [HarmonyPrefix]
-    private static void SaveMessages_Prefix(TextChatUi __instance)
+    private static void Save(TextChatUi __instance)
     {
         if (!persistencyToggle) return;
 
         saved.Clear();
 
-        var queue = (Queue<TextChatMessageUi>)History.queue.GetValue(__instance);
+        var queue = (Queue<TextChatMessageUi>) History.queue.GetValue(__instance);
         foreach (var msg in queue)
         {
-            var tmp = msg.GetComponentInChildren<TMP_Text>();
-            if (tmp != null) saved.Add(tmp.text);
+            TMP_Text meshText = msg.GetComponentInChildren<TMP_Text>();
+
+            if (meshText != null) saved.Add(meshText.text);
         }
     }
 
     // Restore saved messages
     [HarmonyPatch(typeof(TextChatUi), "Awake")]
     [HarmonyPostfix]
-    private static void RestoreMessages_Postfix()
+    private static void Restore()
     {
         if (!persistencyToggle || saved.Count == 0) return;
 
-        foreach (var msg in saved) TextChatUi.ShowMessage(msg);
+        foreach (string msg in saved) TextChatUi.ShowMessage(msg);
 
         saved.Clear();
     }
@@ -50,7 +51,7 @@ public class History
     // Save sent messages for recall
     [HarmonyPatch(typeof(TextChatManager), "UserCode_CmdSendMessageInternal__String__NetworkConnectionToClient")]
     [HarmonyPrefix]
-    private static void RecordSentMessage_Prefix(string message)
+    private static void SaveSentMsgs(string message)
     {
         if (!recallToggle || message.Length == 0) return;
 
@@ -63,11 +64,11 @@ public class History
     // The actual recall functionality ingame
     [HarmonyPatch(typeof(TextChatUi), "Update")]
     [HarmonyPostfix]
-    private static void ArrowRecall_Postfix(TextChatUi __instance)
+    private static void Recall(TextChatUi __instance)
     {
         if (!recallToggle || !TextChatUi.IsOpen || sent.Count == 0) return;
-        var keyboard = Keyboard.current;
 
+        Keyboard keyboard = Keyboard.current;
         if (keyboard == null || (!keyboard.upArrowKey.wasPressedThisFrame && !keyboard.downArrowKey.wasPressedThisFrame)) return;
 
         if (keyboard.upArrowKey.wasPressedThisFrame) recallIdx = Mathf.Clamp(recallIdx + 1, 0, sent.Count - 1); else recallIdx = Mathf.Clamp(recallIdx - 1, -1, sent.Count - 1);
