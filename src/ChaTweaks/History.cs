@@ -9,7 +9,6 @@ namespace ChaTweaks;
 [HarmonyPatch]
 public class History
 {
-    public static bool persistencyToggle = true;
     public static bool recallToggle = true;
 
     private static readonly List<string> sent = [];
@@ -23,7 +22,7 @@ public class History
     [HarmonyPrefix]
     private static void SaveMessages_Prefix(TextChatUi __instance)
     {
-        if (!persistencyToggle) return;
+        if (!Plugin.persistencyToggle.Value) return;
 
         saved.Clear();
 
@@ -40,7 +39,7 @@ public class History
     [HarmonyPostfix]
     private static void RestoreMessages_Postfix()
     {
-        if (!persistencyToggle || saved.Count == 0) return;
+        if (!Plugin.persistencyToggle.Value || saved.Count == 0) return;
 
         foreach (var msg in saved) TextChatUi.ShowMessage(msg);
 
