@@ -9,7 +9,7 @@ internal static class UIPatches
     // Forces the chat to render while the scoreboard hides it
     [HarmonyPatch(typeof(UiVisibilityController), "OnUiVisibilityModeChanged")]
     [HarmonyPostfix]
-    private static void ForceRender_Postfix(UiVisibilityController __instance)
+    private static void UIVisibilityChange(UiVisibilityController __instance)
     {
         if (__instance == null || !IsChatController(__instance) || (GameManager.HiddenUiGroups & UiHidingGroup.ScoreboardOpen) == 0) return;
 
@@ -19,7 +19,7 @@ internal static class UIPatches
     // Keeps chat rendered above other UI when opened
     [HarmonyPatch(typeof(TextChatUi), "SetEnabledInternal")]
     [HarmonyPostfix]
-    private static void Top_Postfix(TextChatUi __instance, bool enabled)
+    private static void Enabled(TextChatUi __instance, bool enabled)
     {
         if (!enabled || __instance == null) return;
 
@@ -29,23 +29,19 @@ internal static class UIPatches
     // Chat draw priority whenever the scoreboard visibility changes
     [HarmonyPatch(typeof(Scoreboard), "UpdateVisibility")]
     [HarmonyPostfix]
-    private static void BoardVisibilityChange_Postfix()
+    private static void BoardVisibilityChange()
     {
-        var chat = SingletonBehaviour<TextChatUi>.HasInstance ? SingletonBehaviour<TextChatUi>.Instance : UnityEngine.Object.FindFirstObjectByType<TextChatUi>();
+        TextChatUi chat = SingletonBehaviour<TextChatUi>.HasInstance ? SingletonBehaviour<TextChatUi>.Instance : UnityEngine.Object.FindFirstObjectByType<TextChatUi>();
 
         if (chat != null) BringToTop(chat.transform);
     }
 
     // Checks whether this is TextChatUI's visibility controller
-    private static bool IsChatController(UiVisibilityController controller)
-    {
-        return controller.GetComponent<TextChatUi>() != null || controller.GetComponentInParent<TextChatUi>() != null || controller.GetComponentInChildren<TextChatUi>(true) != null;
-    }
+    private static bool IsChatController(UiVisibilityController controller) => controller.GetComponent<TextChatUi>() != null || controller.GetComponentInParent<TextChatUi>() != null || controller.GetComponentInChildren<TextChatUi>(true) != null;
 
     private static void ForceRender(UiVisibilityController controller)
     {
-        var canvas = controller.GetComponent<Canvas>();
-        if (canvas != null) canvas.enabled = true;
+        if (controller.TryGetComponent(out Canvas canvas)) canvas.enabled = true;
 
         CanvasGroup canvasGroup = controller.GetComponent<CanvasGroup>();
 
