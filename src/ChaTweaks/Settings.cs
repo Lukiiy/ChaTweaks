@@ -7,10 +7,10 @@ using BepInEx.Configuration;
 namespace ChaTweaks;
 
 [HarmonyPatch]
-public static class ModSettings
+public static class IngameSettings
 {
     private static readonly List<string> boolSetting = ["On", "Off"];
-    private static readonly ConfigEntry<bool>[] Settings = [Plugin.persistencyToggle, Plugin.profanityFilterToggle];
+    private static readonly ConfigEntry<bool>[] Toggleables = [Plugin.persistencyToggle, Plugin.profanityFilterToggle];
 
     [HarmonyPatch(typeof(SettingsMenu), "Start")]
     [HarmonyPostfix]
@@ -19,7 +19,7 @@ public static class ModSettings
         DropdownOption template = __instance.muteChat;
         if (template == null) return;
 
-        foreach (var setting in Settings) AddToggleThing(template, template.transform.parent, __instance.generalTooltip, setting);
+        foreach (var setting in Toggleables) AddToggleThing(template, template.transform.parent, __instance.generalTooltip, setting);
     }
 
     private static void AddToggleThing(DropdownOption template, Transform parent, UiTooltip tooltip, ConfigEntry<bool> setting)
