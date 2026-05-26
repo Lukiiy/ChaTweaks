@@ -10,7 +10,6 @@ namespace ChaTweaks;
 public class History
 {
     public static bool recallToggle = true;
-    public static bool spamCollapseToggle = true;
 
     private static readonly List<string> sent = [];
     private static readonly List<string> saved = [];
@@ -85,7 +84,7 @@ public class History
     [HarmonyPrefix]
     private static bool ShowMessage(string message)
     {
-        if (!spamCollapseToggle || string.IsNullOrEmpty(message) || !SingletonBehaviour<TextChatUi>.HasInstance)
+        if (!Plugin.scamCollapseToggle.Value || string.IsNullOrEmpty(message) || !SingletonBehaviour<TextChatUi>.HasInstance)
         {
             lastMsg = null;
             currentMsgRepeat = 0;

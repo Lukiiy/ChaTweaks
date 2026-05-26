@@ -10,7 +10,7 @@ namespace ChaTweaks;
 public static class IngameSettings
 {
     private static readonly List<string> boolSetting = ["On", "Off"];
-    private static readonly ConfigEntry<bool>[] Toggleables = [Plugin.persistencyToggle, Plugin.profanityFilterToggle];
+    private static readonly ConfigEntry<bool>[] Toggleables = [Plugin.persistencyToggle, Plugin.profanityFilterToggle, Plugin.scamCollapseToggle];
 
     [HarmonyPatch(typeof(SettingsMenu), "Start")]
     [HarmonyPostfix]

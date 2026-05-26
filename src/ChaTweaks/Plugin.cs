@@ -13,14 +13,16 @@ public partial class Plugin : BaseUnityPlugin
 
     internal static ConfigEntry<bool> persistencyToggle = null!;
     internal static ConfigEntry<bool> profanityFilterToggle = null!;
+    internal static ConfigEntry<bool> scamCollapseToggle = null!;
 
     private void Awake()
     {
         harmony = new Harmony(Info.Metadata.GUID);
         Log = Logger;
 
-        persistencyToggle = Config.Bind("ChaTweaks", "Persistent Text Chat", true, "Toggle message persistency for the text chat");
-        profanityFilterToggle = Config.Bind("ChaTweaks", "Profanity Filter", true, "Toggle profanity filter for the text chat");
+        persistencyToggle = Config.Bind("ChaTweaks", "Persistent Text Chat", true, "Allow text chat messages to persist");
+        profanityFilterToggle = Config.Bind("ChaTweaks", "Profanity Filter", true, "Toggle the text profanity filter");
+        scamCollapseToggle = Config.Bind("ChaTweaks", "Scam Collapse", true, "Repeated messages from the same sender will be collapsed");
 
         Log.LogInfo($"Mod {Name} loaded!");
         harmony.PatchAll();
