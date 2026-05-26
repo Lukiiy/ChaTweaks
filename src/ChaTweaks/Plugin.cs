@@ -19,8 +19,8 @@ public partial class Plugin : BaseUnityPlugin
         harmony = new Harmony(Info.Metadata.GUID);
         Log = Logger;
 
-        persistencyToggle = Config.Bind("Settings", "Persistent Text Chat", true, "Toggle message persistency for the text chat");
-        profanityFilterToggle = Config.Bind("Settings", "Profanity Filter", true, "Toggle profanity filter for the text chat");
+        persistencyToggle = Config.Bind("ChaTweaks", "Persistent Text Chat", true, "Toggle message persistency for the text chat");
+        profanityFilterToggle = Config.Bind("ChaTweaks", "Profanity Filter", true, "Toggle profanity filter for the text chat");
 
         Log.LogInfo($"Mod {Name} loaded!");
         harmony.PatchAll();
