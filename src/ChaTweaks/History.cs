@@ -9,7 +9,6 @@ namespace ChaTweaks;
 [HarmonyPatch]
 public class History
 {
-    public static bool persistencyToggle = true;
     public static bool recallToggle = true;
     public static bool spamCollapseToggle = true;
 
@@ -27,7 +26,7 @@ public class History
     [HarmonyPrefix]
     private static void Save(TextChatUi __instance)
     {
-        if (!persistencyToggle) return;
+        if (!Plugin.persistencyToggle.Value) return;
 
         saved.Clear();
 
@@ -45,7 +44,7 @@ public class History
     [HarmonyPostfix]
     private static void Restore()
     {
-        if (!persistencyToggle || saved.Count == 0) return;
+        if (!Plugin.persistencyToggle.Value || saved.Count == 0) return;
 
         foreach (string msg in saved) TextChatUi.ShowMessage(msg);
 
