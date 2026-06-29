@@ -22,7 +22,7 @@ public partial class Plugin : BaseUnityPlugin
 
         persistencyToggle = Config.Bind("ChaTweaks", "Persistent Text Chat", true, "Allow text chat messages to persist");
         profanityFilterToggle = Config.Bind("ChaTweaks", "Profanity Filter", true, "Toggle the text profanity filter (Other players need this off to SEND messages without the profanity filter)");
-        scamCollapseToggle = Config.Bind("ChaTweaks", "Scam Collapse", true, "Repeated messages from the same sender will be collapsed");
+        scamCollapseToggle = Config.Bind("ChaTweaks", "Spam Collapse", true, "Repeated messages from the same sender will be collapsed");
 
         Log.LogInfo($"Mod {Name} loaded!");
         harmony.PatchAll();
