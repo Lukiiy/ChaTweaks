@@ -9,8 +9,6 @@ namespace ChaTweaks;
 [HarmonyPatch]
 public class History
 {
-    public static bool recallToggle = true;
-
     private static readonly List<string> sent = [];
     private static readonly List<string> saved = [];
     private static int recallIdx = -1;
@@ -55,7 +53,7 @@ public class History
     [HarmonyPrefix]
     private static void SaveSentMsgs(string message)
     {
-        if (!recallToggle || message.Length == 0) return;
+        if (message.Length == 0) return;
 
         sent.Remove(message);
         sent.Add(message);
@@ -68,7 +66,7 @@ public class History
     [HarmonyPostfix]
     private static void Recall(TextChatUi __instance)
     {
-        if (!recallToggle || !TextChatUi.IsOpen || sent.Count == 0) return;
+        if (!TextChatUi.IsOpen || sent.Count == 0) return;
 
         Keyboard keyboard = Keyboard.current;
         if (keyboard == null || (!keyboard.upArrowKey.wasPressedThisFrame && !keyboard.downArrowKey.wasPressedThisFrame)) return;
