@@ -4,7 +4,7 @@
         <AssemblyName>me.lukiiy.ChaTweaks</AssemblyName>
         <AssemblyTitle>ChaTweaks</AssemblyTitle>
         <AssemblyName>ChaTweaks</AssemblyName>
-        <Version>0.1.0</Version>
+        <Version>1.0.0</Version>
         <ImplicitUsings>enable</ImplicitUsings>
         <Nullable>enable</Nullable>
     </PropertyGroup>
