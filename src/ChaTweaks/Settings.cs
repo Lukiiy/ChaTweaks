@@ -39,7 +39,7 @@ public static class IngameSettings
         {
             if (meshText.GetComponentInParent<TMP_Dropdown>() != null) continue;
 
-            meshText.text = setting.Definition.Key;
+            meshText.text = "ChaTweaks: " + setting.Definition.Key;
             meshText.ForceMeshUpdate();
 
             break;
