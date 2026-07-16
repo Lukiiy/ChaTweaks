@@ -20,7 +20,7 @@ public partial class Plugin : BaseUnityPlugin
         harmony = new Harmony(Info.Metadata.GUID);
         Log = Logger;
 
-        persistencyToggle = Config.Bind("ChaTweaks", "Persistent Text Chat", true, "Allow text chat messages to persist");
+        persistencyToggle = Config.Bind("ChaTweaks", "Persistent Chat", true, "Allow text chat messages to persist");
         profanityFilterToggle = Config.Bind("ChaTweaks", "Profanity Filter", true, "Toggle the text profanity filter (Other players need this off to SEND messages without the profanity filter)");
         scamCollapseToggle = Config.Bind("ChaTweaks", "Spam Collapse", true, "Repeated messages from the same sender will be collapsed");
 
