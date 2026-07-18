@@ -49,8 +49,8 @@ public class History
     }
 
     // Save sent messages for recall
-    [HarmonyPatch(typeof(TextChatManager), "UserCode_CmdSendMessageInternal__String__NetworkConnectionToClient")]
-    [HarmonyPrefix]
+    [HarmonyPatch(typeof(TextChatManager), "SendChatMessage")]
+    [HarmonyPostfix]
     private static void SaveSentMsgs(string message)
     {
         if (message.Length == 0) return;
